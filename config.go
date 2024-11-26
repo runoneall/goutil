@@ -1,11 +1,13 @@
 package goutil
 
 import (
-	"fmt"
+	configutil "github.com/spf13/viper"
 )
 
-func ReadConfig(filepath string) (map[string]interface{}, error) {
-	fmt.Println("Reading config from file: ", filepath)
-	// TODO: Implement reading config from file
-	return nil, nil
+func ReadConfig(filepath string) map[string]interface{} {
+	configutil.SetConfigFile(filepath)
+	configutil.ReadInConfig()
+	var configMap map[string]interface{}
+	configutil.Unmarshal(&configMap)
+	return configMap
 }
