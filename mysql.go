@@ -32,22 +32,36 @@ func Mysql_Exec(db *sql.DB, sql string) sql.Result {
 	return result
 }
 
-func Mysql_Query(db *sql.DB, sql string) []interface{} {
+func Mysql_Query(db *sql.DB, sql string) []map[string]interface{} {
 	rows, err := db.Query(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
-	var result []interface{}
+	columns, err := rows.Columns()
+	if err != nil {
+		log.Fatal(err)
+	}
+	results := make([]map[string]interface{}, 0)
+	values := make([]interface{}, len(columns))
 	for rows.Next() {
-		var row []interface{}
-		err := rows.Scan(&row)
-		if err != nil {
+		for i := range values {
+			values[i] = new(interface{})
+		}
+		if err := rows.Scan(values...); err != nil {
 			log.Fatal(err)
 		}
-		result = append(result, row)
+		rowMap := make(map[string]interface{})
+		for i, col := range columns {
+			col_content := *(values[i].(*interface{}))
+			if bytes, ok := col_content.([]byte); ok {
+				col_content = string(bytes)
+			}
+			rowMap[col] = col_content
+		}
+		results = append(results, rowMap)
 	}
-	return result
+	return results
 }
 
 func Mysql_Close(db *sql.DB) {
