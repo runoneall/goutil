@@ -17,6 +17,10 @@ func Mysql_Connect(connUrl string) *mysql.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
 	return db
 }
 
@@ -28,12 +32,22 @@ func Mysql_Exec(db *mysql.DB, sql string) mysql.Result {
 	return result
 }
 
-func Mysql_Query(db *mysql.DB, sql string) *mysql.Rows {
+func Mysql_Query(db *mysql.DB, sql string) []interface{} {
 	rows, err := db.Query(sql)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return rows
+	defer rows.Close()
+	var result []interface{}
+	for rows.Next() {
+		var row []interface{}
+		err := rows.Scan(&row)
+		if err != nil {
+			log.Fatal(err)
+		}
+		result = append(result, row)
+	}
+	return result
 }
 
 func Mysql_Close(db *mysql.DB) {
