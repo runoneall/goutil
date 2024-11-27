@@ -1,14 +1,22 @@
 package goutil
 
 import (
+	"log"
+
 	configutil "github.com/spf13/viper"
 )
 
 func Config_Read(filepath string) map[string]interface{} {
 	configutil.SetConfigFile(filepath)
-	configutil.ReadInConfig()
+	err := configutil.ReadInConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 	var configMap map[string]interface{}
-	configutil.Unmarshal(&configMap)
+	err = configutil.Unmarshal(&configMap)
+	if err != nil {
+		log.Fatal(err)
+	}
 	return configMap
 }
 
@@ -17,5 +25,8 @@ func Config_Write(filepath string, configMap map[string]interface{}) {
 	for key, value := range configMap {
 		configutil.Set(key, value)
 	}
-	configutil.WriteConfig()
+	err := configutil.WriteConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
