@@ -1,19 +1,19 @@
 package goutil
 
 import (
-	mysql "database/sql"
+	"database/sql"
 	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func Mysql_ToUrl(host string, port int, user string, password string, dbname string) string {
+func Mysql_MakeDSN(host string, port int, user string, password string, dbname string) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", user, password, host, port, dbname)
 }
 
-func Mysql_Connect(connUrl string) *mysql.DB {
-	db, err := mysql.Open("mysql", connUrl)
+func Mysql_Connect(dsn string) *sql.DB {
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,7 +24,7 @@ func Mysql_Connect(connUrl string) *mysql.DB {
 	return db
 }
 
-func Mysql_Exec(db *mysql.DB, sql string) mysql.Result {
+func Mysql_Exec(db *sql.DB, sql string) sql.Result {
 	result, err := db.Exec(sql)
 	if err != nil {
 		log.Fatal(err)
@@ -32,7 +32,7 @@ func Mysql_Exec(db *mysql.DB, sql string) mysql.Result {
 	return result
 }
 
-func Mysql_Query(db *mysql.DB, sql string) []interface{} {
+func Mysql_Query(db *sql.DB, sql string) []interface{} {
 	rows, err := db.Query(sql)
 	if err != nil {
 		log.Fatal(err)
@@ -50,6 +50,6 @@ func Mysql_Query(db *mysql.DB, sql string) []interface{} {
 	return result
 }
 
-func Mysql_Close(db *mysql.DB) {
+func Mysql_Close(db *sql.DB) {
 	db.Close()
 }
