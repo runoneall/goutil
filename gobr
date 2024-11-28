@@ -6,11 +6,12 @@ shift
 sub_args=$@
 
 # remove old build
-if [ -e $bin_name ]; then
+if [ -e "./$bin_name" ]; then
     rm $bin_name
 fi
 
 # build file
+echo -e "\033[44m START $bin_name \033[0m"
 go build "$bin_name.go"
 
 # run file
@@ -18,6 +19,8 @@ if [ -e $bin_name ]; then
     chmod +x $bin_name
     eval "./$bin_name $sub_args"
     rm $bin_name
+    echo -e "\033[42m RUN FINISH \033[0m"
 else
+    echo -e "\033[41m RUN FAILED \033[0m"
     exit 1
 fi
