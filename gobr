@@ -9,7 +9,7 @@ function run_clean() {
 
 # set failed function
 function run_failed() {
-    echo -e "\033[41m RUN FAILED \033[0m"
+    echo -e "\033[41m RUN STOP \033[0m"
     run_clean $1
     exit 1
 }
