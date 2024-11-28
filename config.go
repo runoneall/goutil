@@ -2,6 +2,7 @@ package goutil
 
 import (
 	"log"
+	"os"
 	"strings"
 
 	configutil "github.com/spf13/viper"
@@ -42,6 +43,17 @@ func Config_Format(content string, targetFormat string) map[string]interface{} {
 	err = configutil.Unmarshal(&configMap)
 	if err != nil {
 		log.Fatal(err)
+	}
+	return configMap
+}
+
+func Config_CommandArgs() map[string]string {
+	args := os.Args[1:]
+	configMap := make(map[string]string)
+	for index, item := range args {
+		if index%2 == 0 && index+1 < len(args) {
+			configMap[item] = args[index+1]
+		}
 	}
 	return configMap
 }
