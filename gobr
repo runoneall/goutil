@@ -19,7 +19,7 @@ bin_name=$1
 
 # show usage
 if [ -z $bin_name ]; then
-    echo "Usage: gobr <build_name> [sub_args]"
+    echo "Usage: gobr <build name> [sub args]"
     exit 1
 fi
 
