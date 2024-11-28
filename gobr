@@ -14,9 +14,19 @@ function run_failed() {
     exit 1
 }
 
-# get build name and sub args
+# check build name
 bin_name=$1
+
+# show usage
+if [ -z $bin_name ]; then
+    echo "Usage: gobr <build_name> [sub_args]"
+    exit 1
+fi
+
+# delete first arg
 shift
+
+# get sub args
 sub_args=$@
 
 # check SIGINT
