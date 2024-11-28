@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+# get build name and sub args
+bin_name=$1
+shift
+sub_args=$@
+
+# remove old build
+if [ -e $bin_name ]; then
+    rm $bin_name
+fi
+
+# build file
+go build "$bin_name.go"
+
+# run file
+if [ -e $bin_name ]; then
+    chmod +x $bin_name
+    eval "./$bin_name $sub_args"
+    rm $bin_name
+else
+    exit 1
+fi
