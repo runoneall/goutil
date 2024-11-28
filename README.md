@@ -22,3 +22,9 @@
 ## network.go
 - `Network_Get(url string, headers ...map[string]string)` return type `*http.Response` send GET request to `url` with optional request headers `headers`
 - `Network_Post(url string, data any, dataType string, headers ...map[string]string)` return type `*http.Response` send POST request to `url` with `data` as request body and `dataType` as content-type, optional request headers `headers`; when `dataType` is `text` data must be `string`, when `dataType` is `binary` data must be `[]byte`, when `dataType` is `json` data must be `map[string]interface{}`, when `dataType` is `form-kv` data must be `map[string]string`, when `dataType` is `form-file` data must be `map[string]string` with `key-name:file-path`
+
+## gobr script
+- a shell script to auto build and run go project
+- Usage: `gobr <build name> [sub args]`
+- `<build name>` is name of go file without `.go` extension
+- `[sub args]` give optional arguments for go file
