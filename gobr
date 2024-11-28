@@ -46,5 +46,5 @@ if [ -e $bin_name ]; then
     run_clean $bin_name
     echo -e "\033[42m RUN FINISH \033[0m"
 else
-    fun_failed $bin_name
+    run_failed $bin_name
 fi
