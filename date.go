@@ -11,6 +11,26 @@ func isHave(haystack string, needle string) bool {
 	return contains
 }
 
+func Date_Now() map[string]int {
+	now := time.Now()
+	year := now.Year()
+	month := int(now.Month())
+	week := int(now.Weekday())
+	day := now.Day()
+	hour := now.Hour()
+	minute := now.Minute()
+	second := now.Second()
+	return map[string]int{
+		"year":   year,
+		"month":  month,
+		"week":   week,
+		"day":    day,
+		"hour":   hour,
+		"minute": minute,
+		"second": second,
+	}
+}
+
 func Date_Format(formatQuery string, useLong bool, useAlias bool) string {
 	now := time.Now()
 	longYear := strconv.Itoa(now.Year())
