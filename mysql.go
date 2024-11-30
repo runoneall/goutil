@@ -3,7 +3,6 @@ package goutil
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -15,32 +14,42 @@ func Mysql_MakeDSN(host string, port int, user string, password string, dbname s
 func Mysql_Connect(dsn string) *sql.DB {
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	err = db.Ping()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	return db
 }
 
 func Mysql_Exec(db *sql.DB, sql string) sql.Result {
+	defer func() {
+		if err := recover(); err != nil {
+			return
+		}
+	}()
 	result, err := db.Exec(sql)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	return result
 }
 
 func Mysql_Query(db *sql.DB, sql string) []map[string]interface{} {
+	defer func() {
+		if err := recover(); err != nil {
+			return
+		}
+	}()
 	rows, err := db.Query(sql)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	defer rows.Close()
 	columns, err := rows.Columns()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	results := make([]map[string]interface{}, 0)
 	values := make([]interface{}, len(columns))
@@ -49,7 +58,7 @@ func Mysql_Query(db *sql.DB, sql string) []map[string]interface{} {
 			values[i] = new(interface{})
 		}
 		if err := rows.Scan(values...); err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 		rowMap := make(map[string]interface{})
 		for i, col := range columns {
