@@ -4,6 +4,8 @@ import (
 	"log"
 	"strings"
 
+	"github.com/oliveagle/jsonpath"
+
 	configutil "github.com/spf13/viper"
 )
 
@@ -44,4 +46,12 @@ func Config_Format(content string, targetFormat string) map[string]interface{} {
 		log.Fatal(err)
 	}
 	return configMap
+}
+
+func Config_JsonPath(configMap map[string]interface{}, jsonPath string) interface{} {
+	result, err := jsonpath.JsonPathLookup(configMap, jsonPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result
 }
